@@ -84,20 +84,35 @@ function getRandom(arr) {
 
 // Function to generate password with user input
 function generatePassword() {
-  // [length, lowercase, uppercase, numerical, special]
- var passwordSettings = getPasswordOptions();
- var length = passwordSettings[0].lengthOption;
- passwordSettings.shift(); //remove length property from array
 
+ var passwordSettings = getPasswordOptions();
+ var chosenLength = passwordSettings[0].lengthOption;
+
+ passwordSettings.shift(); //remove length property from array now that its saved to length variable
+
+  // creates an array that contains the character arrays chosen to use in the password.
  var arrays = passwordSettings.filter(function(setting) {
     return setting.optionBool === true;  //filters and returns the objects that have been chosen for the password
   }).map(function(setting) {
     return setting.arrayChar; //extracts the arrays of characters from the objects that have been chosen for the password.
   });
+  console.log(arrays);
+  // generate the random characters for the password to the length of password chosen
+  var password = "";
+  while (password.length < chosenLength){
+    var randomIndex = Math.floor(Math.random() * (arrays.length));
+    console.log("Random index: " + randomIndex);
+    password = password + getRandom(arrays[randomIndex]);
+    console.log("Password so far: " + password)
+  }
 
-  return arrays
+  return password
 }
 
+
+
+
+//---------------------------------------------//
 // Get references to the #generate element
 var generateBtn = document.querySelector('#generate');
 
