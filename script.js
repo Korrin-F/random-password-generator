@@ -102,7 +102,6 @@ function generatePassword() {
     }
   }
 
-
   return password
 }
 
