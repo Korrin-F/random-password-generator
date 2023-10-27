@@ -21,6 +21,7 @@ function getPasswordOptions() {
   // ask for a password length until a correct answer has been recieved 
   while (isNaN(length) || length < 8 || length > 128){
     length = Number(prompt("Pick a password length between 8 - 128"));
+    // console.log(length); // if the user selects cancel then the result is 0
     // handle error
     if (isNaN(length)){
       alert("Please enter a number only.");
