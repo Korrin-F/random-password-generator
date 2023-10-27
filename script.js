@@ -44,29 +44,35 @@ function getPasswordOptions() {
 // if no setting have been selected then prompt the user for more their entry.
   while (lowercase===false && uppercase===false && numerical===false && special===false){
     alert("Please choose which settings you would like in your password.")
-    var lowercase = confirm("Would you like to include Lowercase Characters?");
-    var uppercase = confirm("Would you like to include Uppercase Characters?");
-    var numerical = confirm("Would you like to include Numbers?");
-    var special = confirm("Would you like to include Special Characters?");
+    lowercase = confirm("Would you like to include Lowercase Characters?");
+    uppercase = confirm("Would you like to include Uppercase Characters?");
+    numerical = confirm("Would you like to include Numbers?");
+    special = confirm("Would you like to include Special Characters?");
   }
   
-  return {
-
-      lengthOption: length, 
-      
-      lowercaseOption: lowercase,
-      lowercaseArray: lowerCasedCharacters,
-      
-      uppercaseOption: uppercase,
-      uppercaseArray: upperCasedCharacters,
-      
-      numericalOption: numerical,
-      numericalArray: numericCharacters,
-    
-      specialOption: special,
-      specialArray: specialCharacters
+  var allSettings = [
+      {
+        lengthOption: length, 
+      },
+      {
+        optionBool: lowercase,
+        arrayChar: lowerCasedCharacters
+      },
+      {
+        optionBool: uppercase,
+        arrayChar: upperCasedCharacters
+      },
+      {
+        optionBool: numerical,
+        arrayChar: numericCharacters
+      },
+      {
+        optionBool: special,
+        arrayChar: specialCharacters
       }
+  ]
   
+  return allSettings
 
 }
 
@@ -80,11 +86,16 @@ function getRandom(arr) {
 function generatePassword() {
   // [length, lowercase, uppercase, numerical, special]
  var passwordSettings = getPasswordOptions();
- var password = "";
- while (password.length <= passwordSettings[0]){
-   if ()
- }
+ var length = passwordSettings[0].lengthOption;
+ passwordSettings.shift(); //remove length property from array
 
+ var arrays = passwordSettings.filter(function(setting) {
+    return setting.optionBool === true;  //filters and returns the objects that have been chosen for the password
+  }).map(function(setting) {
+    return setting.arrayChar; //extracts the arrays of characters from the objects that have been chosen for the password.
+  });
+
+  return arrays
 }
 
 // Get references to the #generate element
