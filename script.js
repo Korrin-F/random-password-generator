@@ -11,10 +11,13 @@ var lowerCasedCharacters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k
 var upperCasedCharacters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
 
-  
+ //---------------------------------------------- 
 // Function to prompt user for password options
+//----------------------------------------------
+
 function getPasswordOptions() {
 
+  //--- GET DESIRED LENGTH ---
   var length = 0;
   // ask for a password length until a correct answer has been recieved 
   while (isNaN(length) || length < 8 || length > 128){
@@ -26,12 +29,13 @@ function getPasswordOptions() {
     }
   }
   
-//* Character types (confirm)
+  
+  //----- GET DESIRED CHARACTER TYPES ----
   var lowercase = false;
   var uppercase = false;
   var numerical = false;
   var special = false;
-// if no setting have been selected then prompt the user for them to accept at least one entry.
+  // if no setting have been selected then prompt the user for them to accept at least one entry.
   while (lowercase===false && uppercase===false && numerical===false && special===false){
     alert("Please choose which settings you would like in your password.")
     lowercase = confirm("Would you like to include Lowercase Characters?");
@@ -39,30 +43,7 @@ function getPasswordOptions() {
     numerical = confirm("Would you like to include Numbers?");
     special = confirm("Would you like to include Special Characters?");
   }
-  //--------------------prev--------------------//
-  // var allSettings = [
-  //     {
-  //       lengthOption: length, 
-  //     },
-  //     {
-  //       optionBool: lowercase,
-  //       arrayChar: lowerCasedCharacters
-  //     },
-  //     {
-  //       optionBool: uppercase,
-  //       arrayChar: upperCasedCharacters
-  //     },
-  //     {
-  //       optionBool: numerical,
-  //       arrayChar: numericCharacters
-  //     },
-  //     {
-  //       optionBool: special,
-  //       arrayChar: specialCharacters
-  //     }
-  // ]
-  //-----------------------------------------------//
-
+  // ------ SAVE CHARACTER BOOLEAN SETTINGS AND CHARACTER ARRAYS ---------
   var settings = [
     {
       optionBool: lowercase,
@@ -82,58 +63,55 @@ function getPasswordOptions() {
     }
   ]
 
+  //------ SAVE ONLY DESIRED CHARACTER ARRAYS TO A NEW ARRAY
   var arrays = settings.filter(function(setting) {
       return setting.optionBool === true;  //filters and returns the objects that have been chosen for the password
     }).map(function(setting) {
       return setting.arrayChar; //extracts the arrays of characters from the objects that have been chosen for the password.
     });
-
+  
+  //------ ADD LENGTH TO END OF ARRAY ------
   arrays.push(length);
 
   return arrays
-
 }
 
+//----------------------------------------------
 // Function for getting a random element from an array
+//----------------------------------------------
+
 function getRandom(arr) {
   var index = Math.floor(Math.random() * (arr.length -1));
   return arr[index]
 }
 
+
+//----------------------------------------------
 // Function to generate password with user input
+//----------------------------------------------
+
 function generatePassword() {
+  //---- EXTRACT THE SETTINGS INTO DIFFERENT VARIABLES ---
+  let allSettings = getPasswordOptions();
+  let chosenLength = allSettings.pop();
+  let chosenArrays = allSettings;
 
-   let allSettings = getPasswordOptions();
-   let chosenLength = allSettings.pop();
-   let chosenArrays = allSettings;
+  //---- GENERATE PASSWORD ----
+  let password = "";
+  let i = 0; //index controller 
 
-//--------------prev--------------------//
-//  var passwordSettings = getPasswordOptions();
-//  var chosenLength = passwordSettings[0].lengthOption;
-
-//  passwordSettings.shift(); //remove length property from array now that its saved to length variable
-
-//   // creates an array that contains the character arrays chosen to use in the password.
-//  var arrays = passwordSettings.filter(function(setting) {
-//     return setting.optionBool === true;  //filters and returns the objects that have been chosen for the password
-//   }).map(function(setting) {
-//     return setting.arrayChar; //extracts the arrays of characters from the objects that have been chosen for the password.
-//   });
-//----------------------------------------//
-
-
-  // generate the random characters for the password to the length of password chosen
-  var password = "";
-  var i = -1;
-  while (password.length < chosenLength){
-    i = 0 // start from the first index in arrays, when every array has been accessed then restart from 0
-    while(i < chosenArrays.length){ // get a random character from the next array in the arrays until one character has been recieved out of each array or the password has reached its total length
-      password = password + getRandom(chosenArrays[i]) // add the character to the password
-      console.log("updated password")
-      i++
+  // start from the first index in arrays, when every array has been accessed then restart from 0
+  // get a random character from the next array in the arrays until one character has been recieved out of each array or the password has reached its total length
+  while(password.length < chosenLength ){ 
+    password = password + getRandom(chosenArrays[i]) // add the random character to the password
+    //control index number ensures it does not go beyond the arrays total length.
+    if (i >= chosenArrays.length -1){
+      i = 0 //start index back at 0
+    }else{
+      i++ //move to the next index
     }
   }
-
+  
   return password
 }
 
@@ -151,6 +129,5 @@ function writePassword() {
 
   passwordText.value = password;
 }
-
 // Add event listener to generate button
 generateBtn.addEventListener('click', writePassword);
