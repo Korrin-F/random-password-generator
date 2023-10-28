@@ -18,7 +18,7 @@ var upperCasedCharacters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K
 function getPasswordOptions() {
 
   //--- GET DESIRED LENGTH ---
-  var length = 0;
+  let length = 0;
   // ask for a password length until a correct answer has been recieved 
   while (isNaN(length) || length < 8 || length > 128){
     length = Number(prompt("Pick a password length between 8 - 128"));
@@ -31,10 +31,10 @@ function getPasswordOptions() {
   
   
   //----- GET DESIRED CHARACTER TYPES ----
-  var lowercase = false;
-  var uppercase = false;
-  var numerical = false;
-  var special = false;
+  let lowercase = false;
+  let uppercase = false;
+  let numerical = false;
+  let special = false;
   // if no setting have been selected then prompt the user for them to accept at least one entry.
   while (lowercase===false && uppercase===false && numerical===false && special===false){
     alert("Please choose which settings you would like in your password.")
@@ -44,7 +44,7 @@ function getPasswordOptions() {
     special = confirm("Would you like to include Special Characters?");
   }
   // ------ SAVE CHARACTER BOOLEAN SETTINGS AND CHARACTER ARRAYS ---------
-  var settings = [
+  let settings = [
     {
       optionBool: lowercase,
       arrayChar: lowerCasedCharacters
@@ -64,7 +64,7 @@ function getPasswordOptions() {
   ]
 
   //------ SAVE ONLY DESIRED CHARACTER ARRAYS TO A NEW ARRAY
-  var arrays = settings.filter(function(setting) {
+  let arrays = settings.filter(function(setting) {
       return setting.optionBool === true;  //filters and returns the objects that have been chosen for the password
     }).map(function(setting) {
       return setting.arrayChar; //extracts the arrays of characters from the objects that have been chosen for the password.
@@ -81,8 +81,42 @@ function getPasswordOptions() {
 //----------------------------------------------
 
 function getRandom(arr) {
-  var index = Math.floor(Math.random() * (arr.length -1));
+  let index = Math.floor(Math.random() * (arr.length -1));
   return arr[index]
+}
+
+//----------------------------------------------
+// Shuffles the final password for extra randomness 
+//----------------------------------------------
+function shufflePassword(password){
+
+  //turn the string into an array
+  let passwordArray = password.split("");
+
+  //----- LOOP THROUGH PASSWORD & CHANGE EVERY VALUE ------
+  for (var i = 0; i < password.length; i++){
+      
+      // Char at current index
+      let charOne = passwordArray[i];
+      // get a random index to swap with
+      let ranIndex = Math.floor(Math.random()*(password.length-1));
+
+      //check if the two indexs are the same if so generate a new index
+      while(i === ranIndex){
+          ranIndex = Math.floor(Math.random()*(password.length-1));
+      }
+      //get the value at the random index
+      let charTwo = passwordArray[ranIndex];
+
+      //swap the index values
+      passwordArray[i] = charTwo;
+      passwordArray[ranIndex] = charOne;
+      
+  }
+  // return the password array to a string
+  let newPassword = passwordArray.join("");
+
+  return newPassword
 }
 
 
@@ -112,7 +146,7 @@ function generatePassword() {
     }
   }
   
-  return password
+  return shufflePassword(password)
 }
 
 
